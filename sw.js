@@ -1,6 +1,6 @@
 const CACHE_NAME = 'sci-notation-v1';
 const urlsToCache = [
-  './index.html',
+  './scientific_notation.html',
   'https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Prompt:wght@300;400;600;700&display=swap'
 ];
 

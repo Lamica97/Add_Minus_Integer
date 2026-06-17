@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เกมบวกลบสัญกรณ์วิทยาศาสตร์: เปิดป้ายทายใจ</title>
+    
+    <!-- PWA & Offline Support for iPad/Mobile -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="สัญกรณ์วิทย์">
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #6366f1;
+            --bg: #eef2f6;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --box-1: #e0f2fe;
+            --box-2: #fef3c7;
+            --accent: #10b981;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden; 
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            max-height: 98vh; 
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-weight: 700;
+            margin: 0 0 2px 0;
+            font-size: 22px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .layout-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 0 0 42%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .setup-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .math-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .num-block {
+            padding: 6px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .block-a { background-color: var(--box-1); border-color: #bae6fd; }
+        .block-b { background-color: var(--box-2); border-color: #fde68a; }
+
+        .input-num {
+            font-family: 'Prompt', sans-serif;
+            padding: 4px 6px;
+            font-size: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            width: 55px;
+            text-align: center;
+        }
+
+        .select-op {
+            font-family: 'Prompt', sans-serif;
+            padding: 4px 6px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 6px;
+            border: 2px solid var(--primary);
+            cursor: pointer;
+        }
+
+        .original-equation-box {
+            background: #ffffff;
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .equation-label {
+            font-weight: 700;
+            color: #475569;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        /* ปรับให้อยู่บรรทัดเดียวกัน */
+        .top-equation-layout {
+            display: flex;
+            flex-direction: row; 
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        #originalEquationDisplay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .eq-box {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 20px; /* ปรับให้พอดีแนวนอน */
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .eq-box.part-a { background-color: var(--box-1); border: 2px dashed #7dd3fc; }
+        .eq-box.part-b { background-color: var(--box-2); border: 2px dashed #fcd34d; }
+        .eq-op { font-size: 22px; font-weight: bold; color: #475569; margin: 0; }
+
+        .eq-result-box {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 10px;
+            background-color: #f0fdf4;
+            border: 2px dashed #10b981;
+            color: #10b981;
+            min-width: 80px;
+            text-align: center;
+        }
+        .eq-result-placeholder { color: #cbd5e1; font-family: 'Prompt', sans-serif; }
+
+        /* ------------- ดีไซน์ฝั่งขวา ------------- */
+        .step-box {
+            background: white;
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .math-text {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 0.5px;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        sup { font-size: 0.6em; vertical-align: super; line-height: 0; }
+
+        .step1-split-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 8px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .split-box {
+            position: relative;
+            border-radius: 8px;
+            padding: 6px 10px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .split-box.part-a { background-color: var(--box-1); border: 2px dashed #7dd3fc; }
+        .split-box.part-b { background-color: var(--box-2); border: 2px dashed #fcd34d; }
+        .split-box.part-op { background-color: #f1f5f9; border: 2px dashed #cbd5e1; flex: 0 0 35px; }
+
+        .blur-cover-mini {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            color: white;
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+            z-index: 10;
+        }
+
+        .cover-default { background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%); }
+        .cover-default:hover { background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%); }
+        .cover-success { background: linear-gradient(135deg, #a7f3d0 0%, #059669 100%); }
+        .cover-success:hover { background: linear-gradient(135deg, #6ee7b7 0%, #047857 100%); }
+        .cover-warning { background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%); }
+        .cover-warning:hover { background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%); }
+        .blur-cover-mini.revealed { display: none; }
+
+        .choice-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 2px;
+            margin-top: 5px;
+        }
+
+        button {
+            font-family: 'Prompt', sans-serif;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:active { transform: scale(0.98); }
+
+        .btn-primary { background-color: var(--primary); margin-top: 5px; }
+        .btn-reset { background-color: #64748b; font-size: 11px; padding: 3px 8px; }
+        
+        .btn-action-green { background-color: var(--accent); box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2); }
+        .btn-action-green:hover { background-color: #059669; }
+        .btn-action-orange { background-color: var(--warning); box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
+        .btn-action-orange:hover { background-color: #d97706; }
+
+        .btn-choice {
+            background-color: #cbd5e1;
+            color: #475569;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .btn-choice:hover { background-color: #94a3b8; color: #ffffff; }
+        .btn-choice.active {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .highlight { padding: 0 4px; border-radius: 4px; display: inline-block; }
+        .hl-a { color: #0369a1; }
+        .hl-b { color: #b45309; }
+        .hl-same { background-color: #dcfce7; color: #15803d; }
+
+        .top-right-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .msg-text {
+            text-align: center; 
+            margin-top: 5px; 
+            font-size: 13px; 
+            font-weight: 500;
+        }
+
+        .decision-area {
+            text-align: center;
+            margin: 0;
+            padding: 8px;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 2px dashed #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-section">
+        <h1>เกมบวก-ลบสัญกรณ์วิทยาศาสตร์</h1>
+        <div class="subtitle">กิจกรรมเปิดป้ายเฉลยทีละขั้นตอน</div>
+    </div>
+
+    <div class="layout-wrapper">
+        
+        <div class="left-panel">
+            <div class="setup-section">
+                <div style="font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 5px;">ตั้งโจทย์ใหม่</div>
+                <div class="math-row">
+                    <div class="num-block block-a">
+                        <input type="number" id="a1" class="input-num" value="3.5" step="any">
+                        <span>×10</span>
+                        <input type="number" id="n1" class="input-num" style="width:40px;" value="5" step="any">
+                    </div>
+                    <select id="operator" class="select-op" onchange="resetAndCalculate()">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                    </select>
+                    <div class="num-block block-b">
+                        <input type="number" id="a2" class="input-num" value="1.2" step="any">
+                        <span>×10</span>
+                        <input type="number" id="n2" class="input-num" style="width:40px;" value="4" step="any">
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="resetAndCalculate()">คำนวณโจทย์</button>
+            </div>
+
+            <div class="original-equation-box">
+                <div class="equation-label">โจทย์ปัญหาและผลลัพธ์:</div>
+                <div class="top-equation-layout">
+                    <div id="originalEquationDisplay">-- รอตั้งโจทย์ --</div>
+                    <div class="eq-op">=</div>
+                    <div class="eq-result-box">
+                        <span class="eq-result-placeholder" id="topAnswerPlaceholder">?</span>
+                        <span id="topAnswerContent" style="display: none;">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="step-box">
+                <div class="top-right-actions">
+                    <div class="step-title"><span>Step 1:</span> ปรับฐาน 10ⁿ ให้เท่ากัน</div>
+                    <button class="btn-reset" onclick="hideStep1Covers()">ซ่อนคำตอบ</button>
+                </div>
+                
+                <div class="choice-buttons">
+                    <button id="btnTarget1" class="btn-choice" onclick="changeMode('targetN1')">ยึดตัวหน้า</button>
+                    <button id="btnTarget2" class="btn-choice" onclick="changeMode('targetN2')">ยึดตัวหลัง</button>
+                </div>
+
+                <div id="step1_message" class="msg-text" style="color:#94a3b8;">-- กดเลือกปุ่มด้านบน --</div>
+
+                <div id="step1_split_container" class="step1-split-container" style="display: none;">
+                    <div class="split-box part-a">
+                        <div class="math-text" id="s1_part1">--</div>
+                        <div id="cover1_1" class="blur-cover-mini cover-default" onclick="revealCover('cover1_1')">❔ พจน์หน้า</div>
+                    </div>
+                    <div class="split-box part-op">
+                        <div class="math-text" id="s1_op">--</div>
+                        <div id="cover1_op" class="blur-cover-mini cover-default" onclick="revealCover('cover1_op')">❔</div>
+                    </div>
+                    <div class="split-box part-b">
+                        <div class="math-text" id="s1_part2">--</div>
+                        <div id="cover1_2" class="blur-cover-mini cover-default" onclick="revealCover('cover1_2')">❔ พจน์หลัง</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <div class="top-right-actions">
+                    <div class="step-title"><span>Step 2:</span> ดึงตัวร่วม</div>
+                    <button class="btn-reset" onclick="hideStep2Covers()">ซ่อนคำตอบ</button>
+                </div>
+
+                <div id="step2_message" class="msg-text" style="color:#cbd5e1;">-- รอการเลือกฐาน --</div>
+
+                <div id="step2_split_container" class="step1-split-container" style="display: none;">
+                    <div class="split-box" style="flex: 1.5; background: #ffffff; border: 2px dashed #94a3b8;">
+                        <div class="math-text" id="s2_part1">--</div>
+                        <div id="cover2_1" class="blur-cover-mini cover-default" onclick="revealCover('cover2_1')">❔ นำตัวเลขทำกัน</div>
+                    </div>
+                    <div class="split-box" style="background: #f0fdf4; border: 2px dashed #86efac; flex: 1;">
+                        <div class="math-text" id="s2_part2">--</div>
+                        <div id="cover2_2" class="blur-cover-mini cover-default" onclick="revealCover('cover2_2')">❔ ฐานร่วม</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-box" id="step3_box">
+                <div class="top-right-actions">
+                    <div class="step-title" style="color: var(--primary);"><span>Step 3:</span> ผลลัพธ์</div>
+                    <button class="btn-reset" onclick="hideStep3Covers()">ซ่อนคำตอบ</button>
+                </div>
+                
+                <div id="step3_message" class="msg-text" style="color:#cbd5e1;">-- รอการเลือกฐาน --</div>
+
+                <div id="step3_split_container" class="step1-split-container" style="display: none;">
+                    <div class="split-box" style="background: #ffffff; border: 2px solid var(--primary); flex: 1;">
+                        <div class="math-text" id="s3_part1" style="color: var(--primary);">--</div>
+                        <div id="cover3_1" class="blur-cover-mini cover-default" onclick="revealCover('cover3_1')">❔ ตัวเลข</div>
+                    </div>
+                    <div class="split-box" style="background: #ffffff; border: 2px solid var(--primary); flex: 1;">
+                        <div class="math-text" id="s3_part2" style="color: var(--primary);">--</div>
+                        <div id="cover3_2" class="blur-cover-mini cover-default" onclick="revealCover('cover3_2')">❔ ฐาน 10</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="decision-area" id="decision_area" style="display: none;">
+                <div style="font-weight: 700; color: #475569; margin-bottom: 5px; font-size: 13px;">
+                    🤔 เป็นสัญกรณ์ที่ถูกต้องหรือยัง?
+                </div>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button id="btn_answer" class="btn-action-green" onclick="checkDecision('answer')">✅ ตอบเลย</button>
+                    <button id="btn_shift" class="btn-action-orange" onclick="checkDecision('shift')">➡️ เลื่อนจุดต่อ</button>
+                </div>
+            </div>
+
+            <div class="step-box" id="step4_box" style="display: none; border-bottom: 3px solid var(--warning);">
+                <div class="top-right-actions">
+                    <div class="step-title" style="color: var(--warning);"><span>Step 4:</span> จัดรูปใหม่</div>
+                    <button class="btn-reset" onclick="hideStep4Covers()">ซ่อนคำตอบ</button>
+                </div>
+                
+                <div id="step4_split_container" class="step1-split-container">
+                    <div class="split-box" style="background: #ffffff; border: 2px solid var(--warning); flex: 1;">
+                        <div class="math-text" id="s4_part1" style="color: #b45309;">--</div>
+                        <div id="cover4_1" class="blur-cover-mini cover-warning" onclick="revealCover('cover4_1')">❔ เลขใหม่</div>
+                    </div>
+                    <div class="split-box" style="background: #ffffff; border: 2px solid var(--warning); flex: 1;">
+                        <div class="math-text" id="s4_part2" style="color: #b45309;">--</div>
+                        <div id="cover4_2" class="blur-cover-mini cover-warning" onclick="revealCover('cover4_2')">❔ ฐานใหม่</div>
+                    </div>
+                </div>
+            </div>
+
+        </div> </div> </div>
+
+<script>
+    let currentMode = null;
+    let finalAnsTopHTML = "";
+    let needsShiftGlobal = false;
+
+    function revealCover(id) {
+        let el = document.getElementById(id);
+        if (el) el.classList.add('revealed');
+
+        if (needsShiftGlobal) {
+            if (id === 'cover4_1' || id === 'cover4_2') {
+                let c1 = document.getElementById('cover4_1').classList.contains('revealed');
+                let c2 = document.getElementById('cover4_2').classList.contains('revealed');
+                if (c1 && c2) { showTopAnswer(); }
+            }
+        }
+    }
+
+    function hideCover(id) {
+        let el = document.getElementById(id);
+        if (el) el.classList.remove('revealed');
+    }
+
+    function hideStep1Covers() { hideCover('cover1_1'); hideCover('cover1_op'); hideCover('cover1_2'); }
+    function hideStep2Covers() { hideCover('cover2_1'); hideCover('cover2_2'); }
+    function hideStep3Covers() { hideCover('cover3_1'); hideCover('cover3_2'); }
+    function hideStep4Covers() { hideCover('cover4_1'); hideCover('cover4_2'); }
+
+    function resetAndCalculate() {
+        hideStep1Covers(); hideStep2Covers(); hideStep3Covers(); hideStep4Covers();
+        currentMode = null;
+        document.getElementById('btnTarget1').classList.remove('active');
+        document.getElementById('btnTarget2').classList.remove('active');
+        
+        document.getElementById('topAnswerPlaceholder').style.display = 'inline-block';
+        document.getElementById('topAnswerContent').style.display = 'none';
+
+        document.getElementById('decision_area').style.display = 'none';
+        document.getElementById('step4_box').style.display = 'none';
+
+        calculate();
+    }
+
+    function changeMode(mode) {
+        currentMode = mode;
+        document.getElementById('btnTarget1').classList.remove('active');
+        document.getElementById('btnTarget2').classList.remove('active');
+        
+        if (mode === 'targetN1') { document.getElementById('btnTarget1').classList.add('active'); } 
+        else if (mode === 'targetN2') { document.getElementById('btnTarget2').classList.add('active'); }
+        
+        hideStep1Covers(); hideStep2Covers(); hideStep3Covers(); hideStep4Covers();
+        
+        document.getElementById('topAnswerPlaceholder').style.display = 'inline-block';
+        document.getElementById('topAnswerContent').style.display = 'none';
+
+        document.getElementById('decision_area').style.display = 'block';
+        document.getElementById('step4_box').style.display = 'none';
+        document.getElementById('step3_box').style.borderBottom = 'none';
+
+        calculate();
+    }
+
+    function showTopAnswer() {
+        document.getElementById('topAnswerPlaceholder').style.display = 'none';
+        document.getElementById('topAnswerContent').style.display = 'inline-block';
+    }
+
+    function checkDecision(studentChoice) {
+        if (studentChoice === 'shift') {
+            if (needsShiftGlobal) {
+                document.getElementById('step4_box').style.display = 'block';
+                document.getElementById('decision_area').style.display = 'none';
+            } else {
+                alert("ลองดูผลลัพธ์ใน Step 3 ดีๆ นะครับ ตัวเลข A อยู่ระหว่าง 1 ถึงไม่ถึง 10 แล้ว ถือเป็นสัญกรณ์ที่ถูกต้องแล้วครับ!");
+            }
+        } else if (studentChoice === 'answer') {
+            if (!needsShiftGlobal) {
+                showTopAnswer();
+                document.getElementById('decision_area').style.display = 'none';
+                document.getElementById('step3_box').style.borderBottom = '3px solid var(--primary)';
+            } else {
+                alert("เอ๊ะ! สังเกตผลลัพธ์ใน Step 3 อีกนิดนะครับ ค่า A ต้องอยู่ตั้งแต่ 1 แต่ไม่ถึง 10 นะ ข้อนี้เรา 'ต้องเลื่อนจุดต่อ' ครับ!");
+            }
+        }
+    }
+
+    function calculate() {
+        let A1 = parseFloat(document.getElementById('a1').value);
+        let N1 = parseInt(document.getElementById('n1').value);
+        let op = document.getElementById('operator').value;
+        let A2 = parseFloat(document.getElementById('a2').value);
+        let N2 = parseInt(document.getElementById('n2').value);
+
+        if (isNaN(A1) || !Number.isInteger(N1) || !Number.isInteger(N2) || isNaN(A2)) {
+            alert("กรุณากรอกตัวเลขให้ครบถ้วน"); return;
+        }
+
+        let strA1_orig = Number(A1.toFixed(10)).toString();
+        let strA2_orig = Number(A2.toFixed(10)).toString();
+
+        // แก้ไขให้กล่องโจทย์ใช้แท็ก span แทน div เพื่อให้อยู่บรรทัดเดียวกัน
+        document.getElementById('originalEquationDisplay').innerHTML = 
+            `<span class="eq-box part-a">(<span style="color:#0369a1">${strA1_orig}</span> <span style="color:#334155">× <span class="highlight hl-same">10<sup>${N1}</sup></span></span>)</span>
+             <span class="eq-op">${op}</span>
+             <span class="eq-box part-b">(<span style="color:#b45309">${strA2_orig}</span> <span style="color:#334155">× <span class="highlight hl-same">10<sup>${N2}</sup></span></span>)</span>`;
+
+        if (currentMode === null) {
+            document.getElementById('step1_message').style.display = 'block';
+            document.getElementById('step1_split_container').style.display = 'none';
+            document.getElementById('step2_message').style.display = 'block';
+            document.getElementById('step2_split_container').style.display = 'none';
+            document.getElementById('step3_message').style.display = 'block';
+            document.getElementById('step3_split_container').style.display = 'none';
+            document.getElementById('decision_area').style.display = 'none';
+            document.getElementById('step4_box').style.display = 'none';
+            return;
+        }
+
+        document.getElementById('step1_message').style.display = 'none';
+        document.getElementById('step1_split_container').style.display = 'flex';
+        document.getElementById('step2_message').style.display = 'none';
+        document.getElementById('step2_split_container').style.display = 'flex';
+        document.getElementById('step3_message').style.display = 'none';
+        document.getElementById('step3_split_container').style.display = 'flex';
+        document.getElementById('decision_area').style.display = 'block';
+        document.getElementById('step3_box').style.borderBottom = 'none';
+
+        let finalN = 0; let activeA1 = A1; let activeA2 = A2;
+
+        if (currentMode === 'targetN1') {
+            finalN = N1; activeA2 = A2 / Math.pow(10, N1 - N2);
+        } else {
+            finalN = N2; activeA1 = A1 / Math.pow(10, N2 - N1);
+        }
+
+        let strA1 = Number(activeA1.toFixed(10)).toString();
+        let strA2 = Number(activeA2.toFixed(10)).toString();
+
+        document.getElementById('s1_part1').innerHTML = `(<span class="highlight hl-a">${strA1}</span> × <span class="highlight hl-same">10<sup>${finalN}</sup></span>)`;
+        document.getElementById('s1_op').innerHTML = op;
+        document.getElementById('s1_part2').innerHTML = `(<span class="highlight hl-b">${strA2}</span> × <span class="highlight hl-same">10<sup>${finalN}</sup></span>)`;
+
+        document.getElementById('s2_part1').innerHTML = `( <span class="highlight hl-a" style="background:#e0f2fe">${strA1}</span> ${op} <span class="highlight hl-b" style="background:#fef3c7">${strA2}</span> )`;
+        document.getElementById('s2_part2').innerHTML = `× <span class="highlight hl-same">10<sup>${finalN}</sup></span>`;
+
+        let combinedA = (op === '+') ? (activeA1 + activeA2) : (activeA1 - activeA2);
+        let strFinalA = Number(combinedA.toFixed(10)).toString();
+
+        document.getElementById('s3_part1').innerHTML = strFinalA;
+        document.getElementById('s3_part2').innerHTML = `× 10<sup>${finalN}</sup>`;
+
+        let standardN = finalN; let standardA = combinedA;
+        needsShiftGlobal = false;
+
+        if (Math.abs(combinedA) >= 10 || (Math.abs(combinedA) < 1 && combinedA !== 0)) {
+            needsShiftGlobal = true;
+            let shift = Math.floor(Math.log10(Math.abs(standardA)));
+            standardA = standardA / Math.pow(10, shift);
+            standardN += shift;
+        }
+        
+        let strStdA = Number(standardA.toFixed(10)).toString();
+
+        if (needsShiftGlobal) {
+            document.getElementById('s4_part1').innerHTML = strStdA;
+            document.getElementById('s4_part2').innerHTML = `× 10<sup>${standardN}</sup>`;
+            finalAnsTopHTML = `${strStdA} × 10<sup>${standardN}</sup>`;
+        } else {
+            finalAnsTopHTML = `${strFinalA} × 10<sup>${finalN}</sup>`;
+        }
+        
+        document.getElementById('topAnswerContent').innerHTML = finalAnsTopHTML;
+    }
+
+    resetAndCalculate();
+
+    // Register Service Worker for Offline usage
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registered for offline use'))
+                .catch(err => console.log('Service Worker registration failed:', err));
+        });
+    }
+</script>
+
+</body>
+</html>

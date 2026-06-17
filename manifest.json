@@ -1,7 +1,7 @@
 {
   "name": "เกมบวกลบสัญกรณ์วิทยาศาสตร์",
   "short_name": "สัญกรณ์วิทย์",
-  "start_url": "./index.html",
+  "start_url": "./scientific_notation.html",
   "display": "standalone",
   "background_color": "#eef2f6",
   "theme_color": "#4f46e5",
